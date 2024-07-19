@@ -1,0 +1,41 @@
+{% extends "header.html" %}
+
+{% block title %}
+| Result
+{% endblock title %}
+
+{% block content %}
+
+<br><br><br>
+<div class="accordion accordion-flush my-5 container" id="accordionFlushExample">
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <div class="accordion-button collapsed border border-2 rounded-1 py-4 d-flex flex-column flex-md-row" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+        <span class="h4 mx-auto text-danger">Rank: {{student.Rank}} </span>
+        <span class="h4 mx-auto">Score: {{student.Total_Marks}} </span>
+        <span class="h4 mx-auto">Attempt: {{student.Total_Attempted}} </span>
+        {% if student.Accuracy > 50 %}
+        <span class="h4 mx-auto text-success">Accuracy: {{student.Accuracy}} </span>
+        {% else %}
+        <span class="h4 mx-auto text-danger">Accuracy: {{student.Accuracy}} </span>
+        {% endif %}
+        <span class="h4 mx-auto">Percentile: {{student.Percentile}} </span>
+      </div>
+    </h2>
+    <div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+      <form action="/solutions/" method="post">
+      {% csrf_token %}
+        
+        <br><input type="number" name="testid" class="btn btn-outline-success w3-right" value="{{test}}" hidden>
+        <br><input type="submit" class="btn btn-outline-success w3-right me-2" value="Solutions">
+        <br>
+      
+      </form>
+        <div class="accordion-body">
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

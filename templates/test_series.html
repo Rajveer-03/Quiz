@@ -1,0 +1,83 @@
+{% extends "header.html" %}
+
+{% block title %}
+| Test Series
+{% endblock title %}
+
+{% block content %}
+
+
+<div style="margin-left: 30vw;">
+    <div class="mt-5 w3-center scrollmenu ms-lg-5 " style="display: flex;" role="group" aria-label="Vertical radio toggle button group">
+        {% for catagory in catagories %}
+        <form action="/test_series/" method="get" id="myform" >
+            {% csrf_token %}
+    
+                {% if check_catagory == catagory.id %}
+                    
+                    <input type="radio" class="btn-check " name="vbtn-radio" id="vbtn-radio{{catagory.id}}" autocomplete="off" checked>
+                    
+                    <label class="btn btn-outline-light me-4 my-2" for="vbtn-radio{{catagory.id}}"> {{catagory.Name}} </label>    
+                
+                {% else %}
+                    <input type="radio" class="btn-check " name="vbtn-radio" id="vbtn-radio{{catagory.id}}" autocomplete="off" onclick="this.form.submit()">
+                    <input type="text" name="catagory_id" value="{{catagory.id}}" hidden>
+                    <label class="btn btn-outline-light me-4 my-2" for="vbtn-radio{{catagory.id}}"> {{catagory.Name}} </label>
+                {% endif %}
+        
+            </form>
+            {% endfor %}
+            
+    </div>
+
+</div>
+<br>
+
+{% if tests %}
+    {% for test in tests %}
+        <form action="/test_series/" method="post">
+            {% csrf_token %}
+        <div class="card w-100 w3-animate-zoom mb-2">
+            <div class="card-body ">
+            <h5 class="card-title fw-bold w3-animate-zoom ">{{test.Name}}</h5>
+                <p class="card-text text-secondary small flex ">{{test.Total_Marks}} Marks {{test.num_Questions}} Questions {{test.Timing}} min 
+                    <input class="w3-right w3-right-align btn btn-outline-dark "  name="testid" type="text" value="{{test.id}}" hidden>
+                    
+                        {% if test.id in attempted_test_ids %}
+                        <br>
+                            <input class="w3-right btn btn-outline-danger w3-animate-zoom mx-2 me-4 mt-1" type="submit" value="     Analysis     " formaction="/analysis/" formmethod="post" >
+                            <input class="w3-right btn btn-outline-success w3-animate-zoom mx-2 me-4 mt-1" type="submit" value="    Solutions    " formaction="/solutions/" formmethod="post" >
+                        {%else%}
+                        <input class="w3-right w3-right-align btn btn-outline-dark w3-animate-zoom me-4" type="submit" value="      Start      ">
+
+                        {% endif %}            
+
+                    </p>
+                </div>
+            </div>
+        </form>
+    {% endfor %}
+
+{% else %}
+    <h1 class="text-info w3-center mt-5" >Tests will be uploaded soon</h1>
+{% endif %}
+
+<script type="text/javascript"> 
+    function preventBack() { 
+        window.history.forward();  
+    } 
+      
+    setTimeout("preventBack()", 0); 
+      
+    window.onunload = function () { null }; 
+</script> 
+
+<script>
+    function change_test()
+    {
+        let form = document.getElementById("myform1");
+        form.submit();
+    }
+</script>
+
+{% endblock content %}

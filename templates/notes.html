@@ -1,0 +1,62 @@
+{% extends "header.html" %}
+
+{% block title %}
+| Notes
+{% endblock title %}
+
+{% block content %}
+<br>
+<br>
+
+<h1 class="display-4 text-center">Notes</h1>
+<br>
+<div style="margin-left: 30vw;">
+    <div class="mt-5 w3-center scrollmenu ms-lg-5 " style="display: flex;" role="group" aria-label="Vertical radio toggle button group">
+        {% for catagory in catagories %}
+        <form action="/notes/" method="get" id="myform" >
+            {% csrf_token %}
+    
+                {% if check_catagory == catagory.id %}
+                    
+                    <input type="radio" class="btn-check " name="vbtn-radio" id="vbtn-radio{{catagory.id}}" autocomplete="off" checked>
+                    
+                    <label class="btn btn-outline-light me-4 my-2" for="vbtn-radio{{catagory.id}}"> {{catagory.Name}} </label>    
+                
+                {% else %}
+                    <input type="radio" class="btn-check " name="vbtn-radio" id="vbtn-radio{{catagory.id}}" autocomplete="off" onclick="this.form.submit()">
+                    <input type="text" name="catagory_id" value="{{catagory.id}}" hidden>
+                    <label class="btn btn-outline-light me-4 my-2" for="vbtn-radio{{catagory.id}}"> {{catagory.Name}} </label>
+                {% endif %}
+        
+            </form>
+            {% endfor %}
+            
+    </div>
+
+</div>
+<br>
+<div class="flex-container ms-2 gap-5 row">
+{% if notes %}
+
+{% for note in notes %}
+    <div class="card ms-5 mt-5 rounded-5 w3-animate-zoom" style="width: 18rem;">
+        <img src="/Content/Downloads/static/images/pdflogo.webp" class="ms-4 mt-3 ps-5" height="150vh" width="150vw" alt="Pdf">
+        <div class="card-body"><br>
+            <h5 class="card-title h4">{{note.Title}}</h5>
+            <br>
+            {% if request.session.user %}
+                <a href="/Content/Download/{{note.Document}}" class="btn btn-outline-dark w3-right" download> Download </a>
+            {% else %}
+                <a href="/login" class="btn btn-outline-dark w3-right"> <img src="/static/images/pdflogo.webp" alt=""> Download </a>
+                
+            {% endif %}
+        </div>
+    </div>
+
+{% endfor %}
+
+{% else %}
+<h1 class="text-info w3-center mt-5"> Notes will be uploaded soon</h1>
+{% endif %}
+</div>
+    {% endblock content %}
